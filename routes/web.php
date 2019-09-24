@@ -38,7 +38,7 @@ Route::get('/product/{id?}', function ($id) {
 Route::put('/updateProduct/{id?}', 'ProductController@update');
 
 
-////--DELETE a link--//
+////--DELETE a Product --//
 Route::delete('/deleteProdct/{id?}', 'ProductController@delete');
 
 Auth::routes();

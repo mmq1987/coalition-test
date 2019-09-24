@@ -41,7 +41,7 @@
                                     <td>
                                         <button class="btn btn-info open-modal" value="{{$product->id}}">Edit
                                         </button>
-                                        <button class="btn btn-danger delete-link" value="{{$product->id}}">Delete
+                                        <button class="btn btn-danger delete-product" value="{{$product->id}}">Delete
                                         </button>
                                     </td>
                                 </tr>
@@ -62,12 +62,12 @@
                             </tfoot>
                         </table>
                         @endif
-                        <div id="linkEditorModal" style="display: none;" aria-hidden="true">
-                            <h4 class="modal-title" id="linkEditorModalLabel">Add Product</h4>
+                        <div id="productEditorModal" style="display: none;" aria-hidden="true">
+                            <h4 class="modal-title" id="productEditorModalLabel">Add Product</h4>
                             <form id="modalFormData" name="modalFormData" class="form-horizontal" novalidate="">
 
                                 <div class="form-group">
-                                    <label for="inputLink" class="col-sm-5 control-label">Product Name</label>
+                                    <label for="name" class="col-sm-5 control-label">Product Name</label>
                                     <div class="col-sm-7">
                                         <input type="text" class="form-control" id="name" name="name"
                                                placeholder="Product Name" value="">
@@ -75,7 +75,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="inputLink" class="col-sm-5 control-label">Product Quantity</label>
+                                    <label for="quantity" class="col-sm-5 control-label">Product Quantity</label>
                                     <div class="col-sm-7">
                                         <input type="text" class="form-control" id="quantity" name="quantity"
                                                placeholder="Product Quantity" value="">
@@ -83,7 +83,7 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <label for="inputLink" class="col-sm-5 control-label">Product Price</label>
+                                    <label for="price" class="col-sm-5 control-label">Product Price</label>
                                     <div class="col-sm-7">
                                         <input type="text" class="form-control" id="price" name="price"
                                                placeholder="Product Price" value="">
@@ -106,14 +106,14 @@
         format: 'dd-mm-yyyy'
     });
     jQuery(document).ready(function ($) {
-        ////----- Open the modal to CREATE a link -----////
+        ////----- Open the modal to CREATE a product -----////
         jQuery('#btn-add').click(function () {
             jQuery('#btn-save').val("add");
             jQuery('#modalFormData').trigger("reset");
-            jQuery('#linkEditorModal').modal();
+            jQuery('#productEditorModal').modal();
         });
 
-        ////----- Open the modal to UPDATE a link -----////
+        ////----- Open the modal to UPDATE a product -----////
         jQuery('body').on('click', '.open-modal', function () {
             var id = $(this).val();
             $.get('product/' + id, function (data) {
@@ -122,7 +122,7 @@
                 jQuery('#quantity').val(data.quantity);
                 jQuery('#price').val(data.price);
                 jQuery('#btn-save').val("update");
-                jQuery('#linkEditorModal').modal();
+                jQuery('#productEditorModal').modal();
             })
         });
 
@@ -154,13 +154,13 @@
                 data: formData,
                 dataType: 'json',
                 success: function (data) {
-                    var link = '<tr id="product' + data.id + '"><td>' + data.name + '</td><td>' + data.quantity + '</td><td>' + data.price + '</td><td>' + data.date + '</td><td>' + data.total + '</td>';
-                    link += '<td><button class="btn btn-info open-modal" value="' + data.id + '">Edit</button>&nbsp;';
-                    link += '<button class="btn btn-danger delete-link" value="' + data.id + '">Delete</button></td></tr>';
+                    var product = '<tr id="product' + data.id + '"><td>' + data.name + '</td><td>' + data.quantity + '</td><td>' + data.price + '</td><td>' + data.date + '</td><td>' + data.total + '</td>';
+                    product += '<td><button class="btn btn-info open-modal" value="' + data.id + '">Edit</button>&nbsp;';
+                    product += '<button class="btn btn-danger delete-product" value="' + data.id + '">Delete</button></td></tr>';
                     if (state == "add") {
-                        jQuery('#product-list').append(link);
+                        jQuery('#product-list').append(product);
                     } else {
-                        $("#product" + id).replaceWith(link);
+                        $("#product" + id).replaceWith(product);
                     }
                     jQuery('#modalFormData').trigger("reset");
                     $.modal.close();
@@ -171,8 +171,8 @@
             });
         });
 
-        ////----- DELETE a link and remove from the page -----////
-        jQuery('.delete-link').click(function () {
+        ////----- DELETE a product and remove from the page -----////
+        jQuery('.delete-product').click(function () {
             var id = $(this).val();
             $.ajaxSetup({
                 headers: {
@@ -194,7 +194,7 @@
     });
 </script>
 <style>
-    #linkEditorModal{
+    #productEditorModal{
         overflow: visible !important;
     }
 </style>
